@@ -1,3 +1,4 @@
 #include <stdio.h>
 
-void printerr(const char* msg);
+void printErr(const char* msg);
+void printHelp();

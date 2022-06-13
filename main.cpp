@@ -6,16 +6,33 @@ enum class Status{
   error,
   help,
   version,
+  counters,
+  tarifs,
 };
 
 int main(int argc, char *argv[]){
   Status stat = Status::error;
   if (argc > 1) {
     int i = 1;
+    while (i < argc){
+      if (argv[i][0] == '-'){
+        if (argv[i][1] == 'h') { // Выводим справку
+          stat = Status::help;
+          printHelp();
+          break;
+        }
+      }
+      i++;
+    }
 
+  } else {
+    stat = Status::counters;
+    printf("Показания\n");
   }
-
-    printf("%d\n", argc);
+  if (stat == Status::error){
+    printErr("Не указана операция (используйте -h для справки)");
+    return 1;
+  }
 /*  
     sqlite3 *db;
     int error;

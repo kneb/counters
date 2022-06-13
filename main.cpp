@@ -1,22 +1,15 @@
 #include <stdio.h>
-#include <sqlite3.h>
 #include "functions.h"
-
-enum class Status{
-  error,
-  help,
-  version,
-  counters,
-  tarifs,
-};
+#include "list.h"
 
 int main(int argc, char *argv[]){
-  Status stat = Status::error;
+  Status stat;
   if (argc > 1) {
+    stat = Status::error;
     int i = 1;
     while (i < argc){
       if (argv[i][0] == '-'){
-        if (argv[i][1] == 'h') { //--Выводим справку
+        if (argv[i][1] == 'h'){ //--Выводим справку
           stat = Status::help;
           printHelp();
           break;
@@ -68,6 +61,6 @@ int main(int argc, char *argv[]){
   sqlite3_close(db);
   printerr("Невозможно открыть файл db.sqlite3");
 */  
-    
-    return 0;
+
+  return 0;
 }

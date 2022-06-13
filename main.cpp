@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <sqlite3.h>
+#include "functions.h"
 
-enum class status{
-    help,
-    version,
+enum class Status{
+  error,
+  help,
+  version,
 };
 
-void printerr(const char* msg);
-
 int main(int argc, char *argv[]){
-    
-    if (argc > 1) {
-        int i = 1;
+  Status stat = Status::error;
+  if (argc > 1) {
+    int i = 1;
 
-    }
+  }
 
     printf("%d\n", argc);
 /*  
@@ -49,8 +49,4 @@ int main(int argc, char *argv[]){
 */  
     
     return 0;
-}
-
-void printerr(const char* msg){
-    fprintf(stderr, "\033[1;31mошибка: \033[0m%s\n", msg);
 }

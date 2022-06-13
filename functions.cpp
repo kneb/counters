@@ -18,3 +18,10 @@ void printHelp(){
   printf("  -h          показать справку\n");
   printf("  -v          показать версию\n");
 }
+
+void printVersion(){
+printf("counters v1.0 (Журнал показаний счетчиков)\n");
+printf("Copyright (C) 2022 Neb K.V.\n");
+printf("E-mail: neb_kv@mail.ru\n");
+printf("Автор: Неб Константин Викторович\n");
+}

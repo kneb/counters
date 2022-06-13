@@ -16,9 +16,13 @@ int main(int argc, char *argv[]){
     int i = 1;
     while (i < argc){
       if (argv[i][0] == '-'){
-        if (argv[i][1] == 'h') { // Выводим справку
+        if (argv[i][1] == 'h') { //--Выводим справку
           stat = Status::help;
           printHelp();
+          break;
+        } else if (argv[i][1] == 'v'){ //--Выводим версию
+          stat = Status::version;
+          printVersion();
           break;
         }
       }

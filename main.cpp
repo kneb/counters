@@ -1,66 +1,50 @@
 #include <stdio.h>
 #include "functions.h"
 #include "list.h"
+#include <unistd.h>
 
 int main(int argc, char *argv[]){
   Status stat;
-  if (argc > 1) {
-    stat = Status::error;
+  stCountersFormat stCF = {false, 0, 0};
+  if (argc > 1) { //--Если аргументов больше 1
+    stat = Status::counters;
     int i = 1;
-    while (i < argc){
+    while (i < argc){ //--Разбираем аргументы
       if (argv[i][0] == '-'){
         if (argv[i][1] == 'h'){ //--Выводим справку
-          stat = Status::help;
-          printHelp();
+          stat = Status::help;      
           break;
         } else if (argv[i][1] == 'v'){ //--Выводим версию
-          stat = Status::version;
-          printVersion();
+          stat = Status::version;       
           break;
+        } else if (argv[i][1] == 'l'){ //--Расширенная информация по счетчикам
+          stCF.extended = true;
+        } else {
+          stat = Status::error;
         }
+
+      } else {
+        stat = Status::error;
+        break;
       }
       i++;
     }
 
-  } else {
+  } else { //--Запустили без аргументов
     stat = Status::counters;
-    printf("Показания\n");
   }
+
   if (stat == Status::error){
-    printErr("Не указана операция (используйте -h для справки)");
+    printErr("Аргументы заданы неправильно (используйте -h для справки)");
     return 1;
+  } else if (stat == Status::help){
+    printHelp();
+  } else if (stat == Status::version){
+    printVersion();
+  } else if (stat == Status::counters){
+    printCounters(&stCF);
   }
-/*  
-    sqlite3 *db;
-    int error;
-  error = sqlite3_open("test.db", &db);
-  if (error == 0) {
-    std::cout << "Connect is ok." << std::endl;
-    sqlite3_stmt *res;
-    const char *tail;
-    error = sqlite3_prepare_v2(db, "SELECT * FROM users", 1000, &res, &tail);
-    if (error == 0) {
-      std::cout << "Display result from table1" << std::endl;
-      int rec_count = 0;
-      while (sqlite3_step(res) == SQLITE_ROW) {
-        std::cout << "Row (" << rec_count << "):" << sqlite3_column_text(res, 0) << " ";
-        std::cout << sqlite3_column_text(res, 1) << " " ;
-        std::cout << sqlite3_column_text(res, 2) << std::endl;
 
-        rec_count++;
-      }
-
-    } else {
-      std::cout << "Can't select data: " << sqlite3_errmsg(db) << std::endl;
-    }
-    sqlite3_finalize(res);
-    
-  } else {
-    std::cout << "Err: " << sqlite3_errmsg(db) << std::endl;
-  }
-  sqlite3_close(db);
-  printerr("Невозможно открыть файл db.sqlite3");
-*/  
 
   return 0;
 }

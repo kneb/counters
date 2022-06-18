@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include "functions.h"
 #include "list.h"
+#include <iostream>
+#include <filesystem>
 #include <unistd.h>
 
 int main(int argc, char *argv[]){
   Status stat;
   stCountersFormat stCF = {false, 0, 0};
+  std::cout << getCurPath() << std::endl;
+
+
   if (argc > 1) { //--Если аргументов больше 1
     stat = Status::counters;
     int i = 1;

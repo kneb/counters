@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "functions.h"
-#include "list.h"
+#include "global.h"
 #include <iostream>
 #include <filesystem>
 #include <unistd.h>
@@ -8,7 +8,7 @@
 int main(int argc, char *argv[]){
   Status stat;
   stCountersFormat stCF = {false, 0, 0};
-  std::cout << getCurPath() << std::endl;
+  global::currentPath = getCurPath();
 
 
   if (argc > 1) { //--Если аргументов больше 1

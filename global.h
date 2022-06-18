@@ -23,12 +23,11 @@ typedef struct{
   int month;
 } stCountersFormat;
 
-extern const char *mon_name[];
+
 
 namespace global{
   extern std::string currentPath;
+  extern const char *monthName[];
 }
-
-std::string getCurPath();
 
 #endif //_LIST_H

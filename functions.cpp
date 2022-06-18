@@ -1,9 +1,17 @@
 #include "functions.h"
-#include "list.h"
 #include <sqlite3.h>
 #include <time.h>
 #include <iostream>
 #include <filesystem>
+#include <unistd.h>
+#include <limits.h>
+
+std::string getCurPath(){
+  char buf[PATH_MAX];
+  readlink("/proc/self/exe", buf, sizeof(buf)-1);
+  std::filesystem::path p(buf);
+  return p.parent_path();
+}
 
 void printErr(const char* msg){
   fprintf(stderr, "\033[1;31mошибка: \033[0m%s\n", msg);
@@ -39,12 +47,13 @@ void printCounters(stCountersFormat *stCF){
   date.tm_hour = 0;   date.tm_min = 0; date.tm_sec = 0;
   date.tm_mday = 1;
   printf("Показания счетчиков на %d %s %dг\n", date.tm_mday,
-         mon_name[date.tm_mon], date.tm_year+1900);
+         global::monthName[date.tm_mon], date.tm_year+1900);
  // printf("time: %.f\n", difftime(mktime(&y2k), mktime(&y2k1)));
 
   sqlite3 *db;
   int error;
-  error = sqlite3_open("db.sqlite3", &db);
+  std::string filename = global::currentPath+"/db.sqlite3";
+  error = sqlite3_open(filename.c_str(), &db);
   if (error == 0) {
     sqlite3_stmt *res;
     const char *tail;

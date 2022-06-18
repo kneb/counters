@@ -11,7 +11,7 @@ LDFLAGS = -l sqlite3
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(BUILDDIR)/main.o $(BUILDDIR)/functions.o $(BUILDDIR)/list.o
+$(EXECUTABLE): $(BUILDDIR)/main.o $(BUILDDIR)/functions.o $(BUILDDIR)/global.o
 	$(CC) $(LDFLAGS) $^ -o $(BUILDDIR)/$@
 
 $(BUILDDIR)/main.o: main.cpp
@@ -20,7 +20,7 @@ $(BUILDDIR)/main.o: main.cpp
 $(BUILDDIR)/functions.o: functions.cpp functions.h
 	$(CC) $(CFLAGS) $< -o $@
 
-$(BUILDDIR)/list.o: list.cpp list.h
+$(BUILDDIR)/global.o: global.cpp global.h
 	$(CC) $(CFLAGS) $< -o $@
 
 clear:

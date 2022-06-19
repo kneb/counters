@@ -20,7 +20,7 @@ enum class Counter{
 typedef struct{
   bool extended;
   int id_counter;
-  int month;
+  int monthCount;
 } stCountersFormat;
 
 

@@ -24,4 +24,4 @@ $(BUILDDIR)/global.o: global.cpp global.h
 	$(CC) $(CFLAGS) $< -o $@
 
 clear:
-	rm -f $(BUILDDIR)/*
+	rm -f $(BUILDDIR)/*.o

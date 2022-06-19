@@ -44,22 +44,23 @@ void printVersion(){
 void printCounters(stCountersFormat *stCF){
   time_t now = time(NULL);
   struct tm date = *localtime(&now);
-  date.tm_hour = 0;   date.tm_min = 0; date.tm_sec = 0;
-  date.tm_mday = 1;
   printf("Показания счетчиков на %d %s %dг\n", date.tm_mday,
          global::monthName[date.tm_mon], date.tm_year+1900);
- // printf("time: %.f\n", difftime(mktime(&y2k), mktime(&y2k1)));
+  int day = date.tm_mday;
+  date.tm_hour = 0;   date.tm_min = 0; date.tm_sec = 0;
+  date.tm_mday = 1;
 
   sqlite3 *db;
   int error;
   std::string filename = global::currentPath+"/db.sqlite3";
   error = sqlite3_open(filename.c_str(), &db);
-  if (error == 0) {
+  if (error == SQLITE_OK) {
     sqlite3_stmt *res;
-    const char *tail;
-    error = sqlite3_prepare_v2(db, "SELECT id, text, tarif FROM counters;", -1, &res, &tail);
-    if (error == 0) {
-
+    char *tail;
+    error = sqlite3_prepare_v2(db, "SELECT id, text, log.tarif, log.\"begin\", \
+                      log.\"end\", log.\"data\" FROM counters LEFT JOIN log ON \
+                      log.id_counter = counters.id;", -1, &res, &tail);
+    if (error == SQLITE_OK) {
       int rec_count = 0;
       while (sqlite3_step(res) == SQLITE_ROW) {
         printf("Row (%d): ", rec_count);
@@ -67,16 +68,14 @@ void printCounters(stCountersFormat *stCF){
         rec_count++;
       }
 
+
+
     } else {
        printErr(sqlite3_errmsg(db));
-       printf("%d\n", error);
     }
     sqlite3_finalize(res);
-
   } else {
     printErr(sqlite3_errmsg(db));
   }
   sqlite3_close(db);
-
-
 }

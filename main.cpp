@@ -24,6 +24,18 @@ int main(int argc, char *argv[]){
           break;
         } else if (argv[i][1] == 'l'){ //--Расширенная информация по счетчикам
           stCF.extended = true;
+        } else if (argv[i][1] == 'c'){ //--Выбрать счетчик
+          i++;
+          if (i <= argc){
+            if (argv[i][0] == '1' || argv[i][0] == 'e')
+              stCF.id_counter = 1;
+            else if (argv[i][0] == '2' || argv[i][0] == 'g')
+              stCF.id_counter = 2;
+            else if (argv[i][0] == '3' || argv[i][0] == 'w')
+              stCF.id_counter = 3;
+          }
+        } else if (argv[i][1] == 'd'){ //--За какой месяц информация
+
         } else {
           stat = Status::error;
         }

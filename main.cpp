@@ -7,9 +7,10 @@
 
 int main(int argc, char *argv[]){
   Status stat;
-  stCountersFormat stCF = {false, 0, 0};
+  stCountersFormat stCF = {false, 0, 0, 0, false};
+  stCF.data.tm_hour = 0;   stCF.data.tm_min = 0; stCF.data.tm_sec = 0;
+  stCF.data.tm_mday = 1;
   global::currentPath = getCurPath();
-
 
   if (argc > 1) { //--Если аргументов больше 1
     stat = Status::counters;
@@ -26,16 +27,26 @@ int main(int argc, char *argv[]){
           stCF.extended = true;
         } else if (argv[i][1] == 'c'){ //--Выбрать счетчик
           i++;
-          if (i <= argc){
+          if (i < argc){
             if (argv[i][0] == '1' || argv[i][0] == 'e')
               stCF.id_counter = 1;
             else if (argv[i][0] == '2' || argv[i][0] == 'g')
               stCF.id_counter = 2;
             else if (argv[i][0] == '3' || argv[i][0] == 'w')
               stCF.id_counter = 3;
-          }
+            else stat = Status::error;
+          } else stat = Status::error;
         } else if (argv[i][1] == 'd'){ //--За какой месяц информация
-
+          i++;
+          if (i < argc){
+            int yy = 0;
+            sscanf(argv[i], "%02d%04d", &stCF.data.tm_mon, &yy);
+            stCF.data.tm_mon --;
+            stCF.data.tm_year = yy-1900;
+            stCF.dataSet = true;
+          } else stat = Status::error;
+        } else if (argv[i][1] == 't'){ //--Выводим тарифы
+          stat = Status::tarifs;
         } else {
           stat = Status::error;
         }
@@ -60,6 +71,8 @@ int main(int argc, char *argv[]){
     printVersion();
   } else if (stat == Status::counters){
     printCounters(&stCF);
+  } else if (stat == Status::tarifs){
+    printTarifs(&stCF);
   }
 
 

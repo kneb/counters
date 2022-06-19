@@ -9,5 +9,7 @@ void printHelp();
 void printVersion();
 void printCounters(stCountersFormat *stCF);
 std::string getCurPath();
+void printTarifs(stCountersFormat *stCF);
+void decMonth(struct tm *date);
 
 #endif //_FUNCTIONS_H

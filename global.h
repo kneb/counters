@@ -1,6 +1,7 @@
 #ifndef _LIST_H
 #define _LIST_H
 #include <string>
+#include <time.h>
 
 enum class Status{
   error,
@@ -21,6 +22,8 @@ typedef struct{
   bool extended;
   int id_counter;
   int monthCount;
+  struct tm data;
+  bool dataSet;
 } stCountersFormat;
 
 

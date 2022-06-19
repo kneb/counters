@@ -11,6 +11,6 @@ void printCounters(stCountersFormat *stCF);
 std::string getCurPath();
 void printTarifs(stCountersFormat *stCF);
 void decMonth(struct tm *date);
-void writeTarif(stCountersFormat *stCF);
+void insUpdLog(stCountersFormat *stCF);
 
 #endif //_FUNCTIONS_H

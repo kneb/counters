@@ -8,8 +8,16 @@ enum class Status{
   help,
   version,
   counters,
-  tarifsRead,
-  tarifWrite,
+  tarifs,
+  updateLog,
+};
+
+enum class Indication{
+  unset,
+  begin,
+  end,
+  amount,
+  all,
 };
 
 typedef struct{
@@ -22,6 +30,7 @@ typedef struct{
   int beginInd;
   int endInd;
   int amount;
+  Indication setIndication;
 } stCountersFormat;
 
 namespace global{

@@ -140,7 +140,7 @@ void printTarifs(stCountersFormat *stCF){
   sqlite3_close(db);
 }
 
-void writeTarif(stCountersFormat *stCF){
+void insUpdLog(stCountersFormat *stCF){
   if (stCF->id_counter == 0){
     printErr("Пропущен обязательный параметр -c");
     return;

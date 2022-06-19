@@ -7,7 +7,8 @@
 
 int main(int argc, char *argv[]){
   Status stat;
-  stCountersFormat stCF = {false, 0, 0, {0}, false, 0.0, 0, 0, 0};
+  stCountersFormat stCF = {false, 0, 0, {0}, false, 0.0, 0, 0, 0, 
+          Indication::unset};
   stCF.data.tm_hour = 0;   stCF.data.tm_min = 0; stCF.data.tm_sec = 0;
   stCF.data.tm_mday = 1;
   global::currentPath = getCurPath();
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]){
             break;
           }
         } else if (argv[i][1] == 't'){ //--Выводим тарифы
-          stat = Status::tarifsRead;
+          stat = Status::tarifs;
         } else if (argv[i][1] == 'T'){ //--Установить тариф
           i++;
           if (i < argc){
@@ -68,17 +69,72 @@ int main(int argc, char *argv[]){
               stat = Status::error;
               break;              
             }
-            stat = Status::tarifWrite;
           } else {
             stat = Status::error;
             break;
           }
-          stat = Status::tarifWrite;
+          stat = Status::updateLog;
+        } else if (argv[i][1] == 'B'){ //--Установить начальные показания 
+          i++;
+          if (i < argc){
+            int err = sscanf(argv[i], "%i", &stCF.beginInd);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
+          } else {
+            stat = Status::error;
+            break;
+          }
+          if (stCF.setIndication == Indication::unset){
+            stCF.setIndication = Indication::begin;
+          } else {
+            stCF.setIndication = Indication::all;
+          }
+          stat = Status::updateLog;
+        } else if (argv[i][1] == 'E'){ //--Установить конечные показания 
+          i++;
+          if (i < argc){
+            int err = sscanf(argv[i], "%i", &stCF.endInd);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
+          } else {
+            stat = Status::error;
+            break;
+          }
+          if (stCF.setIndication == Indication::unset || 
+              stCF.setIndication == Indication::amount){
+            stCF.setIndication = Indication::end;
+          } else {
+            stCF.setIndication = Indication::all;
+          }
+          stat = Status::updateLog;
+        } else if (argv[i][1] == 'S'){ //--Установить +количество 
+          i++;
+          if (i < argc){
+            int err = sscanf(argv[i], "%i", &stCF.amount);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
+          } else {
+            stat = Status::error;
+            break;
+          }
+          if (stCF.setIndication == Indication::unset || 
+              stCF.setIndication == Indication::end){
+            stCF.setIndication = Indication::amount;
+          } else {
+            stCF.setIndication = Indication::all;
+          }
+          stat = Status::updateLog;
+
         } else {
           stat = Status::error;
           break;
         }
-
       } else {
         stat = Status::error;
         break;
@@ -99,10 +155,10 @@ int main(int argc, char *argv[]){
     printVersion();
   } else if (stat == Status::counters){
     printCounters(&stCF);
-  } else if (stat == Status::tarifsRead){
+  } else if (stat == Status::tarifs){
     printTarifs(&stCF);
-  } else if (stat == Status::tarifWrite){
-    writeTarif(&stCF);
+  } else if (stat == Status::updateLog){
+    insUpdLog(&stCF);
   }
 
 

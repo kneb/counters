@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]){
   Status stat;
-  stCountersFormat stCF = {false, 0, 0, 0, false};
+  stCountersFormat stCF = {false, 0, 0, {0}, false, 0.0, 0, 0, 0};
   stCF.data.tm_hour = 0;   stCF.data.tm_min = 0; stCF.data.tm_sec = 0;
   stCF.data.tm_mday = 1;
   global::currentPath = getCurPath();
@@ -34,21 +34,49 @@ int main(int argc, char *argv[]){
               stCF.id_counter = 2;
             else if (argv[i][0] == '3' || argv[i][0] == 'w')
               stCF.id_counter = 3;
-            else stat = Status::error;
-          } else stat = Status::error;
+            else {
+              stat = Status::error;
+              break;
+            }
+          } else {
+            stat = Status::error;
+            break;
+          }
         } else if (argv[i][1] == 'd'){ //--За какой месяц информация
           i++;
           if (i < argc){
             int yy = 0;
-            sscanf(argv[i], "%02d%04d", &stCF.data.tm_mon, &yy);
+            int err = sscanf(argv[i], "%02d%04d", &stCF.data.tm_mon, &yy);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
             stCF.data.tm_mon --;
             stCF.data.tm_year = yy-1900;
             stCF.dataSet = true;
-          } else stat = Status::error;
+          } else {
+            stat = Status::error;
+            break;
+          }
         } else if (argv[i][1] == 't'){ //--Выводим тарифы
-          stat = Status::tarifs;
+          stat = Status::tarifsRead;
+        } else if (argv[i][1] == 'T'){ //--Установить тариф
+          i++;
+          if (i < argc){
+            int err = sscanf(argv[i], "%f", &stCF.tarif);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
+            stat = Status::tarifWrite;
+          } else {
+            stat = Status::error;
+            break;
+          }
+          stat = Status::tarifWrite;
         } else {
           stat = Status::error;
+          break;
         }
 
       } else {
@@ -71,8 +99,10 @@ int main(int argc, char *argv[]){
     printVersion();
   } else if (stat == Status::counters){
     printCounters(&stCF);
-  } else if (stat == Status::tarifs){
+  } else if (stat == Status::tarifsRead){
     printTarifs(&stCF);
+  } else if (stat == Status::tarifWrite){
+    writeTarif(&stCF);
   }
 
 

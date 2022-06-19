@@ -45,7 +45,7 @@ void printHelp(){
   printf("              количество в параметре\n");
   printf("  -E [%%d]     установить показания счетчика на конец\n");
   printf("              заданного периода\n");
-  printf("  -T          установить тариф\n");
+  printf("  -T [%%f]     установить тариф\n");
   printf(" Инфо:\n");
   printf("  -h          показать справку\n");
   printf("  -v          показать версию\n");
@@ -128,6 +128,45 @@ void printTarifs(stCountersFormat *stCF){
         rec_count++;
       }
 
+
+
+    } else {
+       printErr(sqlite3_errmsg(db));
+    }
+    sqlite3_finalize(res);
+  } else {
+    printErr(sqlite3_errmsg(db));
+  }
+  sqlite3_close(db);
+}
+
+void writeTarif(stCountersFormat *stCF){
+  if (stCF->id_counter == 0){
+    printErr("Пропущен обязательный параметр -c");
+    return;
+  }
+  time_t now = time(NULL);
+  struct tm date;
+  if (stCF->dataSet == false)
+    date = *localtime(&now);
+  else
+    date = stCF->data;
+  date.tm_hour = 0;   date.tm_min = 0; date.tm_sec = 0;
+  date.tm_mday = 1;
+  mktime(&date);
+  sqlite3 *db;
+  int error;
+  std::string filename = global::currentPath+"/db.sqlite3";
+  error = sqlite3_open(filename.c_str(), &db);
+  if (error == SQLITE_OK) {
+    sqlite3_stmt *res;
+    
+    
+    
+    
+    error = sqlite3_exec(db, "", NULL, NULL, NULL);
+    if (error == SQLITE_OK) {
+      int rec_count = 0;
 
 
     } else {

@@ -8,14 +8,8 @@ enum class Status{
   help,
   version,
   counters,
-  tarifs,
-};
-
-enum class Counter{
-  all,
-  electro,
-  gas,
-  water,
+  tarifsRead,
+  tarifWrite,
 };
 
 typedef struct{
@@ -24,9 +18,11 @@ typedef struct{
   int monthCount;
   struct tm data;
   bool dataSet;
+  float tarif;
+  int beginInd;
+  int endInd;
+  int amount;
 } stCountersFormat;
-
-
 
 namespace global{
   extern std::string currentPath;

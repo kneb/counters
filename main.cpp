@@ -130,6 +130,18 @@ int main(int argc, char *argv[]){
             stCF.setIndication = Indication::all;
           }
           stat = Status::updateLog;
+        } else if (argv[i][1] == 'm'){ //--Установить количество месяцев
+          i++;
+          if (i < argc){
+            int err = sscanf(argv[i], "%i", &stCF.monthCount);
+            if (err <= 0){
+              stat = Status::error;
+              break;              
+            }
+          } else {
+            stat = Status::error;
+            break;
+          }
 
         } else {
           stat = Status::error;

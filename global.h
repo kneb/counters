@@ -35,7 +35,11 @@ typedef struct{
 
 namespace global{
   extern std::string currentPath;
-  extern const char *monthName[];
+  extern const char *monthName_i[];
+  extern const char *monthName_v[];
+  time_t decMonth(struct tm *date, int count=1);
+  std::string getCurPath();
+  int getDayMonth(int month, int year);
 }
 
 #endif //_LIST_H

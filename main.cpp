@@ -7,11 +7,11 @@
 
 int main(int argc, char *argv[]){
   Status stat;
-  stCountersFormat stCF = {false, 0, 0, {0}, false, 0.0, 0, 0, 0, 
+  stCountersFormat stCF = {false, 0, 1, {0}, false, 0.0, 0, 0, 0, 
           Indication::unset};
   stCF.data.tm_hour = 0;   stCF.data.tm_min = 0; stCF.data.tm_sec = 0;
   stCF.data.tm_mday = 1;
-  global::currentPath = getCurPath();
+  global::currentPath = global::getCurPath();
 
   if (argc > 1) { //--Если аргументов больше 1
     stat = Status::counters;
@@ -74,13 +74,13 @@ int main(int argc, char *argv[]){
             break;
           }
           stat = Status::updateLog;
-        } else if (argv[i][1] == 'B'){ //--Установить начальные показания 
+        } else if (argv[i][1] == 'B'){ //--Установить начальные показания
           i++;
           if (i < argc){
             int err = sscanf(argv[i], "%i", &stCF.beginInd);
             if (err <= 0){
               stat = Status::error;
-              break;              
+              break;
             }
           } else {
             stat = Status::error;
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
             int err = sscanf(argv[i], "%i", &stCF.endInd);
             if (err <= 0){
               stat = Status::error;
-              break;              
+              break;
             }
           } else {
             stat = Status::error;
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
             int err = sscanf(argv[i], "%i", &stCF.amount);
             if (err <= 0){
               stat = Status::error;
-              break;              
+              break;
             }
           } else {
             stat = Status::error;
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
           i++;
           if (i < argc){
             int err = sscanf(argv[i], "%i", &stCF.monthCount);
-            if (err <= 0){
+            if (err <= 0 || stCF.monthCount <= 0){
               stat = Status::error;
               break;              
             }
@@ -172,7 +172,6 @@ int main(int argc, char *argv[]){
   } else if (stat == Status::updateLog){
     insUpdLog(&stCF);
   }
-
 
   return 0;
 }
